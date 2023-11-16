@@ -2,7 +2,7 @@ const { body, validationResult } = require('express-validator');
 
 
 
-
+ 
 exports.registerValidationRules = [
     body('username', 'Username is required')
         .trim()
