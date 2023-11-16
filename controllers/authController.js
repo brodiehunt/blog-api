@@ -16,9 +16,10 @@ exports.register = [
             const existingUser = await authServices.checkUserExists(req);
             if (existingUser) {
                 return res.status(400).json({
-                    errors: [
-                        {msg: 'Email already in use'}
-                    ]
+                    error: {
+                        msg: 'Email already in use'
+                    }
+                    
                 })
             }
 
@@ -36,9 +37,9 @@ exports.register = [
 
         } catch(error) {
             res.status(500).json({
-                errors: [
-                    {msg: 'internal server error'}
-                ] 
+                error: {
+                    msg: 'internal server error'
+                } 
             })
         }
     }

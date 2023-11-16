@@ -172,3 +172,54 @@ describe('POST /api/auth/register -- validation of feilds', () => {
         expect(response.body.errors[0].passwordConfirm).toBe('Password confirmation does not match password');
     })
 })
+
+test('existing user in the database', async () => {
+    authServices.checkUserExists.mockResolvedValue({ id: 'existingId', email: 'existing@example.com' });
+    authServices.createUser.mockResolvedValue({ id: '123', username: 'testuser', email: 'test@example.com' });
+    const userData = { username: 'testuser', email: 'test@example.com', password: 'Password123', passwordConfirm: 'Password123' };
+
+    const response = await request(app)
+    .post('/api/auth/register')
+    .send(userData);
+
+    expect(response.status).toBe(400)
+    expect(response.headers['content-type']).toMatch(/json/);
+    expect(response.body.error.msg).toBeDefined();
+    expect(response.body.error.msg).toBe('Email already in use');
+})
+
+describe('Errors thrown from auth services are caught', () => {
+
+    // existing user service throws error 
+    test('Error in existing user service', async () => {
+        authServices.checkUserExists.mockRejectedValue(new Error('Database error'));
+        const userData = { username: 'testuser', email: 'test@example.com', password: 'Password123', passwordConfirm: 'Password123' };
+
+        const response = await request(app)
+        .post('/api/auth/register')
+        .send(userData);
+
+        expect(response.status).toBe(500);
+        expect(response.headers['content-type']).toMatch(/json/);
+        expect(response.body.error.msg).toBeDefined();
+        expect(response.body.error.msg).toBe('internal server error');
+
+
+    })
+
+    // create user service throws error
+    test('Error in create user service', async () => {
+        authServices.checkUserExists.mockResolvedValue(null);
+        authServices.createUser.mockRejectedValue(new Error('Database error'));
+        const userData = { username: 'testuser', email: 'test@example.com', password: 'Password123', passwordConfirm: 'Password123' };
+
+        const response = await request(app)
+            .post('/api/auth/register')
+            .send(userData)
+
+        expect(response.status).toBe(500);
+        expect(response.headers['content-type']).toMatch(/json/);
+        expect(response.body.error.msg).toBeDefined();
+        expect(response.body.error.msg).toBe('internal server error');
+    })
+})
