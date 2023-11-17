@@ -15,14 +15,13 @@ exports.getProfile = async (req, res, next) => {
     
 };
 
-// will validate sanitize and validate form feilds. 
-// will make call to user service to update user.
+// Add checks for email already in use. 
 exports.updateProfile = [
     validateUserFeilds.updateValidationRules,
     validateUserFeilds.handleValidation,
     async (req, res, next) => {
+        
         try {
-            
             const user = await userServices.updateUser(req);
             res.status(200).json({
                 msg: 'User updated successfully',
@@ -33,9 +32,10 @@ exports.updateProfile = [
                 }
             })
         } catch(error) {
+            
             res.status(500).json({
                 error: {
-                    msg: 'Internal server error'
+                    msg: error.message
                 }
             })
         }
@@ -44,5 +44,20 @@ exports.updateProfile = [
 ];
 
 exports.deleteProfile = async (req, res, next) => {
-
+    try {
+        const deletedUser = await userServices.deleteUser(req);
+        console.log(deletedUser, 'deletedUser')
+        res.status(200).json({
+            msg: 'User deleted',
+            user: deletedUser.username
+        })
+    } catch(error) {
+        console.log('error message', error)
+        res.status(500).json({
+            error: {
+                msg: error.message
+            }
+        })
+    }
+    
 };

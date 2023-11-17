@@ -52,18 +52,39 @@ describe('GET - /api/user/profile', () => {
 
 describe('PUT /api/user/profile', () => {
     test('HAPPY PATH - Token and from feilds provided', async () => {
-        const newUserData = { username: 'newUserNa', email: 'newemail@email.com'};
+        const newUserData = { username: 'newUserNam', email: 'newemail@email.com'};
 
         const response = await request(app)
             .put('/api/user/profile')
             .set('Cookie', [`jwt=${token}`])
             .send(newUserData)
-        
-            console.log(response.body);
+
         expect(response.status).toBe(200);
         expect(response.body.msg).toBe('User updated successfully')
         expect(response.body.user).toBeDefined()
         expect(response.body.user.username).toBe(newUserData.username)
         expect(response.body.user.email).toBe(newUserData.email)
     })
+
+
+})
+
+describe('DELETE - /api/user/delete', () => {
+    // for now. check that it deletes the user. 
+
+    test('should delete user', async () => {
+        const user = await User.create({email: 'brodie@gmail.com', username: 'Brodie', password:'Password1'});
+        const userToken = jwt.sign({ sub: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+        const response = await request(app)
+            .delete('/api/user/profile')
+            .set('Cookie', [`jwt=${userToken}`])
+
+
+        expect(response.status).toBe(200);
+        expect(response.body.msg).toBe('User deleted')
+        expect(response.body.user).toBe('Brodie')
+    })
+
+
 })
