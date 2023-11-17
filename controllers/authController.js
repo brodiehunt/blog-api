@@ -8,9 +8,39 @@ const {generateToken} = require('../utils/utilityFunctions');
 // if user validate password
 // if user is validated, generate token and send response
 // if not send error
-exports.login = async (req, res, next) => {
+exports.login = [
+    validationUtil.loginValidationRules,
+    validationUtil.handleValidation,
+    async (req, res, next) => {
+        try {
+           
+            const user = await authServices.checkUserExists(req);
 
-};
+            if (!user || !user.verifyPassword(req.body.password)) {
+                return res.status(400).json({
+                    error: {
+                        msg: 'Incorrect email or password'
+                    }
+                });
+            }
+
+            const token = generateToken(user.id)
+            res.cookie('jwt', token, {
+                httpOnly: true
+            });
+            return res.status(200).json({
+                msg: 'Successful login'
+            })
+            
+        } catch(error) {
+            res.status(500).json({
+                error: {
+                    msg: 'Internal server error'
+                }
+            })
+        }
+    }
+];
 
 exports.register = [
     validationUtil.registerValidationRules,

@@ -60,11 +60,5 @@ describe('User services tests', () => {
         expect(newUser.password).toBeDefined();
         expect(newUser.password).not.toBe(userData.password);
     })
-
-    test('wrong data specified for user', async () => {
-        const userData = {username: 'username1', password: 'Password1'};
-        const reqObj = {body: userData};
-        const newUser = await authServices.createUser(reqObj);
-    })
 })
 

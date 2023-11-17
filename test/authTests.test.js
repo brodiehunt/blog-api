@@ -223,3 +223,65 @@ describe('Errors thrown from auth services are caught', () => {
         expect(response.body.error.msg).toBe('internal server error');
     })
 })
+
+
+// LOGIN ENDPOINT TESTS
+
+describe('Login endpoint /api/auth/login', () => {
+
+    // Happy path - user login credentials are correct
+    test('HAPPY PATH - credentials are valid', async () => {
+        const mockUser = {
+            id: 1, 
+            email: 'test@example.com', 
+            password: 'hashedPassword123', // Simulate a hashed password
+            verifyPassword: jest.fn().mockReturnValue(true) // Mock verifyPassword method
+        };
+        authServices.checkUserExists.mockResolvedValue(mockUser);
+
+        const response = await request(app)
+            .post('/api/auth/login')
+            .send({ email: 'test@example.com', password: 'hashedPassword123'})
+
+        expect(response.status).toBe(200);
+        expect(response.header['content-type']).toMatch(/json/);
+        expect(response.body.msg).toBeDefined()
+        expect(response.body.msg).toBe('Successful login');
+    })
+
+    // unhappy path - User login credentials are incorrect, either email or password is wrong.
+    test('Incorrect email', async () => {
+        const userData = { email: 'test@example.com', password: 'Password123' };
+        authServices.checkUserExists.mockResolvedValue(null);
+
+        const response = await request(app)
+            .post('/api/auth/login')
+            .send(userData)
+
+        expect(response.status).toBe(400);
+        expect(response.header['content-type']).toMatch(/json/);
+        expect(response.body.error.msg).toBeDefined()
+        expect(response.body.error.msg).toBe('Incorrect email or password');
+
+    })
+
+    test('Incorrect password, correct email', async () => {
+        const mockUser = {
+            id: 1, 
+            email: 'test@example.com', 
+            password: 'hashedPassword123', // Simulate a hashed password
+            verifyPassword: jest.fn().mockReturnValue(false) // Mock verifyPassword method
+        };
+        authServices.checkUserExists.mockResolvedValue(mockUser);
+
+        const response = await request(app)
+            .post('/api/auth/login')
+            .send({ email: 'test@example.com', password: 'Password123' })
+
+        expect(response.status).toBe(400);
+        expect(response.header['content-type']).toMatch(/json/);
+
+        expect(response.body.error.msg).toBeDefined()
+        expect(response.body.error.msg).toBe('Incorrect email or password');
+    })
+})
