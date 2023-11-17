@@ -25,7 +25,21 @@ exports.registerValidationRules = [
     .withMessage('Password confirmation does not match password')
 ];
 
-exports.handleRegisterValidation = async (req, res, next) => {
+exports.loginValidationRules = [
+    body('email', 'Must be a correct email: example@email.com')
+        .trim()
+        .isEmail()
+        .escape(),
+    body('password', 'Must include an password')
+        .trim()
+        .isLength({min: 6, max: 20})
+        .withMessage('Password must be more than 5 and less than 20 characters')
+        .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/)
+        .withMessage('Password must contain at least one uppercase letter, one lowercase letter, and one number.'),
+];
+
+
+exports.handleValidation = async (req, res, next) => {
     const result = validationResult(req);
 
     if (result.isEmpty()) {
