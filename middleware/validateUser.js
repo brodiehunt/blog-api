@@ -38,10 +38,21 @@ exports.loginValidationRules = [
         .withMessage('Password must contain at least one uppercase letter, one lowercase letter, and one number.'),
 ];
 
+exports.updateValidationRules = [
+    body('email', 'Must be a correct email: example@email.com')
+        .trim()
+        .isEmail()
+        .escape(),
+    body('username', 'Username is required')
+        .trim()
+        .isLength({min: 3, max: 20})
+        .withMessage('Username must be more than 2 and less than 20 characters')
+        .escape(),
+]
+
 
 exports.handleValidation = async (req, res, next) => {
     const result = validationResult(req);
-
     if (result.isEmpty()) {
         return next();
     }

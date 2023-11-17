@@ -38,7 +38,6 @@ const localVerifyCallback = async (email, password, done) => {
 const jwtVerifyCallback = async (jwt_payload, done) => {
     try {
         const user = await User.findById(jwt_payload.sub);
-
         // user exists
         if (user) {
             return done(null, user);

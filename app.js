@@ -21,7 +21,7 @@ const userRouter = require('./routes/userRoutes');
 const postRouter = require('./routes/postRoutes');
 const authRouter = require('./routes/authRoutes');
 // user routes
-app.use('/api/user', userRouter);
+app.use('/api/user', passport.authenticate('jwt', {session: false}), userRouter);
 // public routes (with apikey);
 app.use('/api/public/',  postRouter)
 // auth routes
