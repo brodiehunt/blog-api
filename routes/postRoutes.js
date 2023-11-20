@@ -5,10 +5,10 @@ const postController = require('../controllers/postController');
 
 // PUBLIC POSTS ROUTES - REQUIRES API_KEY AUTH
 
-router.get('/posts', postController.getUserPosts);
+router.get('/posts', postController.getUserPostsPublic);
 
-router.get('/posts/:postId', postController.getSinglePost);
+router.get('/posts/:postId', postController.getSinglePostPublic);
 
-router.post('/posts/:postId/comment', postController.addComment);
+router.post('/posts/:postId/comment', postController.addCommentPublic);
 
 module.exports = router;

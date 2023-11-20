@@ -14,7 +14,7 @@ router.put('/profile', userController.updateProfile);
 // DELETE PROFILE - (AND ALL RELATED INFO)
 router.delete('/profile', userController.deleteProfile);
 
-
+router.post('/profile/apiKey', userController.generateApiKey);
 
 
 
@@ -37,3 +37,6 @@ router.delete('/posts/:postId', postController.deletePost);
 
 
 module.exports = router;
+
+// 655a9f7a6813d2a1159839ad post id
+// user id 655a9dcfdb8855c98581a5a0

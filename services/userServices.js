@@ -24,3 +24,10 @@ exports.deleteUser = async (req) => {
     console.log(user)
     return user;
 }
+
+exports.addApiKey = async (req, apiKey) => {
+    const user = await User.findById(req.user.id);
+    user.apiKey = apiKey;
+    await user.save();
+    return user;
+}

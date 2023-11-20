@@ -28,6 +28,11 @@ const PostSchema = new Schema({
         ref: 'User', 
         required: true
     },
+    published: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
     comments: [{
         username: {
             type: String,

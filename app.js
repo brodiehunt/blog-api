@@ -4,6 +4,7 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const passport = require('passport');
 require('dotenv').config();
+const {apiKeyMiddleware} = require('./middleware/validateApiKey');
 const app = express();
 
 // middleware  
@@ -23,7 +24,7 @@ const authRouter = require('./routes/authRoutes');
 // user routes
 app.use('/api/user', passport.authenticate('jwt', {session: false}), userRouter);
 // public routes (with apikey);
-app.use('/api/public/',  postRouter)
+app.use('/api/public/', apiKeyMiddleware, postRouter)
 // auth routes
 app.use('/api/auth', authRouter);
 
