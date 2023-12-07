@@ -64,6 +64,6 @@ exports.handleValidation = async (req, res, next) => {
     });
 
     return res.status(400).json({
-        errors: errorsMap
+        error: errorsMap
     })
 }

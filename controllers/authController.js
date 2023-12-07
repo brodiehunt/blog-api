@@ -45,7 +45,7 @@ exports.register = [
             // check email not in use already
             const existingUser = await authServices.checkUserExists(req);
             if (existingUser) {
-                return res.status(400).json({
+                return res.status(409).json({
                     error: {
                         msg: 'Email already in use'
                     }
