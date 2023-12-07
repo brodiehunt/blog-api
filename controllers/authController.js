@@ -62,7 +62,11 @@ exports.register = [
                 httpOnly: true
               });
             res.status(201).json({
-                msg: 'User successfully registered'
+                msg: 'User successfully registered',
+                data: {
+                    username: newUser.username,
+                    email: newUser.email
+                }
             })
 
         } catch(error) {

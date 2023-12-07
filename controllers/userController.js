@@ -1,6 +1,7 @@
 const userServices = require('../services/userServices');
 const validateUserFeilds = require('../middleware/validateUser');
 const {generateApiKey} = require('../utils/utilityFunctions');
+
 exports.getProfile = async (req, res, next) => {
     // passport already authorized user 
     
@@ -8,7 +9,6 @@ exports.getProfile = async (req, res, next) => {
         user: {
             username: req.user.username,
             email: req.user.email,
-            apiKey: req.user.apiKey
         },
         msg: 'Success'
     })
@@ -28,7 +28,6 @@ exports.updateProfile = [
                 user: {
                     username: user.username,
                     email: user.email,
-                    apiKey: user.apiKey
                 }
             })
         } catch(error) {

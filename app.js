@@ -7,9 +7,18 @@ require('dotenv').config();
 const {apiKeyMiddleware} = require('./middleware/validateApiKey');
 const app = express();
 
+const whitelist =['http://localhost:5173'];
 // middleware  
 app.use(express.json());
-app.use(cors())
+app.use(cors({
+  credentials: true,
+  origin: function (origin,callback) {
+    // Check each url in whitelist and see if it includes the origin (instead of matching exact string)
+    const whitelistIndex = whitelist.findIndex((url) => url.includes(origin))
+    console.log("found whitelistIndex", whitelistIndex)
+    callback(null,whitelistIndex > -1)
+}
+}))
 app.use(cookieParser());
 
 // passport config
