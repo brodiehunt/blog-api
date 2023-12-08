@@ -10,27 +10,33 @@ exports.login = [
         try {
            
             const user = await authServices.checkUserExists(req);
-
-            if (!user || !user.verifyPassword(req.body.password)) {
+            const passwordCorrect = await user.verifyPassword(req.body.password);
+            
+            if (!user || !passwordCorrect) {
+                console.log('incorrect password block')
                 return res.status(400).json({
                     error: {
-                        msg: 'Incorrect email or password'
+                        message: 'Incorrect email or password'
                     }
                 });
             }
-
+           
             const token = generateToken(user.id)
             res.cookie('jwt', token, {
                 httpOnly: true
             });
             return res.status(200).json({
-                msg: 'Successful login'
+                message: 'Successful login',
+                data: {
+                    username: user.username,
+                    email: user.email
+                }
             })
             
         } catch(error) {
             res.status(500).json({
                 error: {
-                    msg: 'Internal server error'
+                    message: 'Internal server error'
                 }
             })
         }
@@ -47,7 +53,7 @@ exports.register = [
             if (existingUser) {
                 return res.status(409).json({
                     error: {
-                        msg: 'Email already in use'
+                        message: 'Email already in use'
                     }
                     
                 })
@@ -62,7 +68,7 @@ exports.register = [
                 httpOnly: true
               });
             res.status(201).json({
-                msg: 'User successfully registered',
+                message: 'User successfully registered',
                 data: {
                     username: newUser.username,
                     email: newUser.email
@@ -72,7 +78,7 @@ exports.register = [
         } catch(error) {
             res.status(500).json({
                 error: {
-                    msg: 'internal server error'
+                    message: 'internal server error'
                 } 
             })
         }

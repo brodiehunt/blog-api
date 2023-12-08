@@ -5,13 +5,13 @@ exports.getUserPosts = async (req, res, next) => {
         const userPosts = await postServices.userPosts(req);
 
         return res.status(200).json({
-            msg: 'Success',
+            message: 'Success',
             posts: userPosts
         })
     } catch(error) {
         res.status(500).json({
             error: {
-                msg: error.message
+                message: error.message
             }
         })
     }
@@ -24,7 +24,7 @@ exports.createPost = async (req, res, next) => {
     if (!req.body.title || !req.body.content) {
         return res.status(400).json({
             error: {
-                msg: 'Content or title not specified'
+                message: 'Content or title not specified'
             }
         })
     }
@@ -32,13 +32,13 @@ exports.createPost = async (req, res, next) => {
     try {
        const newPost = await postServices.createPost(req);
        return res.status(201).json({
-        msg: 'Post created successfully',
+        message: 'Post created successfully',
         post: newPost
        });
     } catch(error) {
         return res.status(500).json({
             error: {
-                msg: error.message
+                message: error.message
             }
         })
     }
@@ -52,25 +52,25 @@ exports.getSinglePost = async (req, res, next) => {
         if (!post) {
             return res.status(404).json({
                 error: {
-                    msg: 'Resource not found'
+                    message: 'Resource not found'
                 }
             });
         }
         if (req.user.id !== post.user.toString()) {
             return res.status(403).json({
                 error: {
-                    msg: 'Not authorized to access resource'
+                    message: 'Not authorized to access resource'
                 }
             })
         }
         return res.status(200).json({
-            msg: 'success',
+            message: 'success',
             post: post
         })
     } catch(error) {
         return res.status(500).json({
             error: {
-                msg: error.message
+                message: error.message
             }
         })
     }

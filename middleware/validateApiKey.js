@@ -7,7 +7,7 @@ const apiKeyMiddleware = async (req, res, next) => {
         if (!apiKey) {
             return res.status(401).json({
                 error: {
-                    msg: "Api key is required"
+                    message: "Api key is required"
                 }
             })
         }
@@ -17,7 +17,7 @@ const apiKeyMiddleware = async (req, res, next) => {
         if (!user) {
             return res.status(401).json({
                 error: {
-                    msg: 'Invalid Api key'
+                    message: 'Invalid Api key'
                 }
             })
         }
@@ -28,7 +28,7 @@ const apiKeyMiddleware = async (req, res, next) => {
     } catch(error) {
         return res.status(500).json({
             error: {
-                msg: error.message
+                message: error.message
             }
         })    
     }

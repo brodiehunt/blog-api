@@ -31,10 +31,10 @@ exports.createPost = async (req) => {
 exports.updatePost = async (req) => {
     const {postId} = req.params;
     const post = await Post.findById(postId);
-
-    if (req.body.title) post.title = req.body.title;
-    if (req.body.content) post.content = req.body.content;
-    if (req.body.published) post.published = req.body.published;
+    const {title, content, published} = req.body;
+    if (title) post.title = title;
+    if (content) post.content = content;
+    if (published) post.published = published;
     post.last_updated = Date.now();
 
     await post.save();

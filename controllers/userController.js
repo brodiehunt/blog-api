@@ -10,7 +10,7 @@ exports.getProfile = async (req, res, next) => {
             username: req.user.username,
             email: req.user.email,
         },
-        msg: 'Success'
+        message: 'Success'
     })
     
 };
@@ -24,7 +24,7 @@ exports.updateProfile = [
         try {
             const user = await userServices.updateUser(req);
             res.status(200).json({
-                msg: 'User updated successfully',
+                message: 'User updated successfully',
                 user: {
                     username: user.username,
                     email: user.email,
@@ -34,7 +34,7 @@ exports.updateProfile = [
             
             res.status(500).json({
                 error: {
-                    msg: error.message
+                    message: error.message
                 }
             })
         }
@@ -47,14 +47,14 @@ exports.deleteProfile = async (req, res, next) => {
         const deletedUser = await userServices.deleteUser(req);
         console.log(deletedUser, 'deletedUser')
         res.status(200).json({
-            msg: 'User deleted',
+            message: 'User deleted',
             user: deletedUser.username
         })
     } catch(error) {
         console.log('error message', error)
         res.status(500).json({
             error: {
-                msg: error.message
+                message: error.message
             }
         })
     }
@@ -68,13 +68,13 @@ exports.generateApiKey = async (req, res, next) => {
         const apiKey = generateApiKey();
         const updatedUser = await userServices.addApiKey(req, apiKey);
         return res.status(200).json({
-            msg: 'Api key generated',
+            message: 'Api key generated',
             apiKey: updatedUser.apiKey
         })
     } catch(error) {
         res.status(500).json({
             error: {
-                msg: error.message
+                message: error.message
             }
         })
     }
