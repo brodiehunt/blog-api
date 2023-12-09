@@ -15,7 +15,6 @@ app.use(cors({
   origin: function (origin,callback) {
     // Check each url in whitelist and see if it includes the origin (instead of matching exact string)
     const whitelistIndex = whitelist.findIndex((url) => url.includes(origin))
-    console.log("found whitelistIndex", whitelistIndex)
     callback(null,whitelistIndex > -1)
 }
 }))

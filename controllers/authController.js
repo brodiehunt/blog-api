@@ -10,8 +10,7 @@ exports.login = [
         try {
            
             const user = await authServices.checkUserExists(req);
-            const passwordCorrect = await user.verifyPassword(req.body.password);
-            
+            const passwordCorrect = user ? await user.verifyPassword(req.body.password) : null;
             if (!user || !passwordCorrect) {
                 console.log('incorrect password block')
                 return res.status(400).json({

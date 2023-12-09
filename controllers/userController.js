@@ -1,4 +1,5 @@
 const userServices = require('../services/userServices');
+const authServices = require('../services/authServices');
 const validateUserFeilds = require('../middleware/validateUser');
 const {generateApiKey} = require('../utils/utilityFunctions');
 
@@ -22,12 +23,23 @@ exports.updateProfile = [
     async (req, res, next) => {
         
         try {
-            const user = await userServices.updateUser(req);
+            const emailInUse = await authServices.checkUserExists(req);
+            if (emailInUse && (req.user.email !== req.body.email)) {
+                return res.status(409).json({
+                    error: {
+                        message: 'Email already in use'
+                    }
+                    
+                })
+            }
+
+            const updatedUser = await userServices.updateUser(req);
+
             res.status(200).json({
                 message: 'User updated successfully',
                 user: {
-                    username: user.username,
-                    email: user.email,
+                    username: updatedUser.username,
+                    email: updatedUser.email,
                 }
             })
         } catch(error) {

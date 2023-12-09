@@ -84,13 +84,13 @@ exports.updatePost = async (req, res, next) => {
     try {
         const updatedPost = await postServices.updatePost(req);
         return res.status(200).json({
-            msg: 'Post updated successfully',
+            message: 'Post updated successfully',
             post: updatedPost
         })
     } catch(error) {
         return res.status(500).json({
             error: {
-                msg: error.message
+                message: error.message
             }
         })
     }
@@ -101,12 +101,12 @@ exports.deletePost = async (req, res, next) => {
     try {
         const deletedPost = await postServices.deletePost(req);
         res.status(200).json({
-            msg: "Post deleted successfully"
+            message: "Post deleted successfully"
         })
     } catch(error) {
         return res.status(500).json({
             error: {
-                msg: error.message
+                message: error.message
             }
         })
     }
@@ -118,13 +118,13 @@ exports.getUserPostsPublic = async (req, res, next) => {
     try {
         const publicPosts = await postServices.userPostsPublic(req);
         return res.status(200).json({
-            msg: 'Success',
+            message: 'Success',
             posts: publicPosts
         })
     } catch(error) {
         return res.status(500).json({
             error: {
-                msg: error.message
+                message: error.message
             }
         })
     }
@@ -137,30 +137,30 @@ exports.getSinglePostPublic = async (req, res, next) => {
 
         if (!post) {
             return res.status(404).json({
-                msg: 'resource not found'
+                message: 'resource not found'
             })
         }
 
         if (req.user.id !== post.id.toString()) {
             return res.status(403).json({
-                msg: 'Permission denied'
+                message: 'Permission denied'
             })
         }
         if (!post.published) {
             return res.status(403).json({
-                msg: 'Permission denied'
+                message: 'Permission denied'
             })
         }
 
         return res.status(200).json({
-            msg: 'success',
+            message: 'success',
             post: post
         })
         
     } catch(error) {
         res.status(500).json({
             error: {
-                msg: error.message
+                message: error.message
             }
         })
     }
@@ -172,13 +172,13 @@ exports.addCommentPublic = async (req, res, next) => {
         const updatedPost = await postServices.addCommentPublic(req);
 
         return res.status(200).json({
-            msg: 'Comment added',
+            message: 'Comment added',
             post: updatedPost
         })
     } catch(error) {
         return res.status(500).json({
             error: {
-                msg: error.message
+                message: error.message
             }
         })
     }

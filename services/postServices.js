@@ -32,11 +32,12 @@ exports.updatePost = async (req) => {
     const {postId} = req.params;
     const post = await Post.findById(postId);
     const {title, content, published} = req.body;
+    console.log('published', published)
     if (title) post.title = title;
     if (content) post.content = content;
-    if (published) post.published = published;
+    post.published = published;
     post.last_updated = Date.now();
-
+    console.log('updated post', post);
     await post.save();
     return post;
 }

@@ -14,7 +14,7 @@ router.put('/profile', userController.updateProfile);
 // DELETE PROFILE - (AND ALL RELATED INFO)
 router.delete('/profile', userController.deleteProfile);
 
-router.post('/profile/apiKey', userController.generateApiKey);
+router.get('/profile/apiKey', userController.generateApiKey);
 
 
 
